@@ -72,6 +72,7 @@ fun ChecklistTemplatesScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(templates) { template ->
+                    val itemCount = template.categories.sumOf { it.items.size }
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -79,10 +80,7 @@ fun ChecklistTemplatesScreen(
                             .padding(16.dp)
                     ) {
                         Text(template.name, style = MaterialTheme.typography.titleMedium)
-                        Text(
-                            "${template.items.size} items",
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                        Text("$itemCount items", style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }

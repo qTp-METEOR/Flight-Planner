@@ -12,8 +12,15 @@ class ChecklistViewModel(private val repo: ChecklistRepository) : ViewModel() {
     fun addTemplate(name: String): Long = repo.addTemplate(name)
     fun updateTemplate(template: ChecklistTemplate) = repo.updateTemplate(template)
     fun deleteTemplate(id: Long) = repo.deleteTemplate(id)
-    fun addItem(templateId: Long, text: String) = repo.addItem(templateId, text)
-    fun removeItem(templateId: Long, itemId: Long) = repo.removeItem(templateId, itemId)
+
+    fun addCategory(templateId: Long, name: String): Long = repo.addCategory(templateId, name)
+    fun removeCategory(templateId: Long, categoryId: Long) = repo.removeCategory(templateId, categoryId)
+
+    fun addItem(templateId: Long, categoryId: Long, text: String): Long =
+        repo.addItem(templateId, categoryId, text)
+
+    fun removeItem(templateId: Long, categoryId: Long, itemId: Long) =
+        repo.removeItem(templateId, categoryId, itemId)
 }
 
 class ChecklistViewModelFactory(

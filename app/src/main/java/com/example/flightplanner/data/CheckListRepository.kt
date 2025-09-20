@@ -10,6 +10,9 @@ interface ChecklistRepository {
     fun updateTemplate(template: ChecklistTemplate)
     fun deleteTemplate(id: Long)
 
-    fun addItem(templateId: Long, text: String)
-    fun removeItem(templateId: Long, itemId: Long)
+    fun addCategory(templateId: Long, name: String): Long
+    fun removeCategory(templateId: Long, categoryId: Long)
+
+    fun addItem(templateId: Long, categoryId: Long, text: String): Long
+    fun removeItem(templateId: Long, categoryId: Long, itemId: Long)
 }

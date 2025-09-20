@@ -1,5 +1,6 @@
 package com.example.flightplanner.data
 
+import com.example.flightplanner.model.ChecklistCategory
 import com.example.flightplanner.model.ChecklistItem
 import com.example.flightplanner.model.ChecklistTemplate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +12,7 @@ class InMemoryChecklistRepository : ChecklistRepository {
     override val templates: StateFlow<List<ChecklistTemplate>> = _templates
 
     private val templateIdGen = AtomicLong(1)
+    private val categoryIdGen = AtomicLong(1)
     private val itemIdGen = AtomicLong(1)
 
     override fun addTemplate(name: String): Long {
@@ -30,16 +32,41 @@ class InMemoryChecklistRepository : ChecklistRepository {
         _templates.value = _templates.value.filterNot { it.id == id }
     }
 
-    override fun addItem(templateId: Long, text: String) {
+    override fun addCategory(templateId: Long, name: String): Long {
+        val template = _templates.value.firstOrNull { it.id == templateId } ?: return -1
+        val id = categoryIdGen.getAndIncrement()
+        val newCategory = ChecklistCategory(id, name, emptyList())
+        val updated = template.copy(categories = template.categories + newCategory)
+        updateTemplate(updated)
+        return id
+    }
+
+    override fun removeCategory(templateId: Long, categoryId: Long) {
         val template = _templates.value.firstOrNull { it.id == templateId } ?: return
-        val item = ChecklistItem(id = itemIdGen.getAndIncrement(), text = text)
-        val updated = template.copy(items = template.items + item)
+        val updated = template.copy(categories = template.categories.filterNot { it.id == categoryId })
         updateTemplate(updated)
     }
 
-    override fun removeItem(templateId: Long, itemId: Long) {
+    override fun addItem(templateId: Long, categoryId: Long, text: String): Long {
+        val template = _templates.value.firstOrNull { it.id == templateId } ?: return -1
+        val category = template.categories.firstOrNull { it.id == categoryId } ?: return -1
+        val id = itemIdGen.getAndIncrement()
+        val newItem = ChecklistItem(id, text)
+        val updatedCategory = category.copy(items = category.items + newItem)
+        val updated = template.copy(categories = template.categories.map {
+            if (it.id == categoryId) updatedCategory else it
+        })
+        updateTemplate(updated)
+        return id
+    }
+
+    override fun removeItem(templateId: Long, categoryId: Long, itemId: Long) {
         val template = _templates.value.firstOrNull { it.id == templateId } ?: return
-        val updated = template.copy(items = template.items.filterNot { it.id == itemId })
+        val category = template.categories.firstOrNull { it.id == categoryId } ?: return
+        val updatedCategory = category.copy(items = category.items.filterNot { it.id == itemId })
+        val updated = template.copy(categories = template.categories.map {
+            if (it.id == categoryId) updatedCategory else it
+        })
         updateTemplate(updated)
     }
 }
