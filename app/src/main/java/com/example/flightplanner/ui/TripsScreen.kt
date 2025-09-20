@@ -18,7 +18,8 @@ import com.example.flightplanner.viewmodel.TripViewModel
 @Composable
 fun TripsScreen(
     vm: TripViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onOpenTrip: (Long) -> Unit
 ) {
     val trips by vm.trips.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -61,9 +62,7 @@ fun TripsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                // Later: navigate to trip detail
-                            }
+                            .clickable { onOpenTrip(trip.id) }
                             .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {

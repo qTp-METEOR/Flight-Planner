@@ -52,8 +52,21 @@ fun FlightPlannerApp() {
         composable("trips") {
             TripsScreen(
                 onBack = { navController.popBackStack() },
-                vm = tripVm
+                vm = tripVm,
+                onOpenTrip = { id -> navController.navigate("trip/$id") }
             )
         }
+        composable(
+            route = "trip/{tripId}",
+            arguments = listOf(navArgument("tripId") { type = NavType.LongType })
+        ) { entry ->
+            val id = entry.arguments?.getLong("tripId") ?: return@composable
+            TripDetailScreen(
+                vm = tripVm,
+                tripId = id,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
     }
 }
