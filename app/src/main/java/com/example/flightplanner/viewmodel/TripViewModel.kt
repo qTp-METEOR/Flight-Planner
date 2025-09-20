@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.flightplanner.data.TripRepository
 import com.example.flightplanner.model.Trip
+import com.example.flightplanner.model.TripChecklist
 import kotlinx.coroutines.flow.StateFlow
 
 class TripViewModel(private val repo: TripRepository) : ViewModel() {
     val trips: StateFlow<List<Trip>> = repo.trips
 
-    fun addTrip(name: String): Long = repo.addTrip(name)
+    fun addTrip(name: String, checklists: List<TripChecklist> = emptyList()): Long =
+        repo.addTrip(name, checklists)
     fun deleteTrip(id: Long) = repo.deleteTrip(id)
 }
 

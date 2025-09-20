@@ -52,6 +52,7 @@ fun FlightPlannerApp() {
         composable("trips") {
             TripsScreen(
                 onBack = { navController.popBackStack() },
+                checklistVm = checklistVm,
                 vm = tripVm,
                 onOpenTrip = { id -> navController.navigate("trip/$id") }
             )

@@ -1,6 +1,7 @@
 package com.example.flightplanner.data
 
 import com.example.flightplanner.model.Trip
+import com.example.flightplanner.model.TripChecklist
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicLong
@@ -11,9 +12,9 @@ class InMemoryTripRepository : TripRepository {
 
     private val idGen = AtomicLong(1)
 
-    override fun addTrip(name: String): Long {
+    override fun addTrip(name: String, checklists: List<TripChecklist>): Long {
         val id = idGen.getAndIncrement()
-        val trip = Trip(id, name)
+        val trip = Trip(id, name, checklists)
         _trips.value = _trips.value + trip
         return id
     }

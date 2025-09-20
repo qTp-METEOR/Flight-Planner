@@ -1,5 +1,7 @@
 package com.example.flightplanner.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.flightplanner.model.PlannerEntry
 import com.example.flightplanner.model.TripDay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +14,7 @@ class InMemoryPlannerRepository : PlannerRepository {
     private val _days = MutableStateFlow<List<TripDay>>(emptyList())
     override val days: StateFlow<List<TripDay>> = _days
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun addDay(): Long {
         val id = idGen.getAndIncrement()
         val nextDate = (_days.value.maxByOrNull { it.date }?.date ?: LocalDate.now()).plusDays(1)
