@@ -13,6 +13,9 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
     fun addTrip(name: String, checklists: List<TripChecklist> = emptyList()): Long =
         repo.addTrip(name, checklists)
     fun deleteTrip(id: Long) = repo.deleteTrip(id)
+    fun toggleTripChecklistItem(tripId: Long, checklistId: Long, categoryId: Long, itemId: Long) =
+        repo.toggleTripChecklistItem(tripId, checklistId, categoryId, itemId)
+
 }
 
 class TripViewModelFactory(

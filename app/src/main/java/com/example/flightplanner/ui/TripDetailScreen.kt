@@ -1,6 +1,8 @@
 package com.example.flightplanner.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,16 +49,40 @@ fun TripDetailScreen(
                 if (trip.checklists.isEmpty()) {
                     Text("No checklists for this trip.")
                 } else {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         items(trip.checklists) { cl ->
                             Column(Modifier.padding(8.dp)) {
-                                Text(cl.name, style = MaterialTheme.typography.titleMedium)
-                                val count = cl.categories.sumOf { it.items.size }
-                                Text("$count items", style = MaterialTheme.typography.bodySmall)
+                                Text(cl.name, style = MaterialTheme.typography.titleLarge)
+
+                                cl.categories.forEach { cat ->
+                                    Text(
+                                        cat.name,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                    )
+
+                                    cat.items.forEach { item ->
+                                        Row(
+                                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                                        ) {
+                                            Checkbox(
+                                                checked = item.checked,
+                                                onCheckedChange = {
+                                                    vm.toggleTripChecklistItem(trip.id, cl.id, cat.id, item.id)
+                                                }
+                                            )
+                                            Text(item.text)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
             }
 
         }

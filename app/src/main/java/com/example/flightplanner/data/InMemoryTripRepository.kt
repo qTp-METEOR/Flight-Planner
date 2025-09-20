@@ -22,4 +22,24 @@ class InMemoryTripRepository : TripRepository {
     override fun deleteTrip(id: Long) {
         _trips.value = _trips.value.filterNot { it.id == id }
     }
+
+    override fun toggleTripChecklistItem(tripId: Long, checklistId: Long, categoryId: Long, itemId: Long) {
+        val trip = _trips.value.firstOrNull { it.id == tripId } ?: return
+        val updatedChecklists = trip.checklists.map { checklist ->
+            if (checklist.id == checklistId) {
+                val updatedCategories = checklist.categories.map { cat ->
+                    if (cat.id == categoryId) {
+                        val updatedItems = cat.items.map { item ->
+                            if (item.id == itemId) item.copy(checked = !item.checked) else item
+                        }
+                        cat.copy(items = updatedItems)
+                    } else cat
+                }
+                checklist.copy(categories = updatedCategories)
+            } else checklist
+        }
+        val updatedTrip = trip.copy(checklists = updatedChecklists)
+        _trips.value = _trips.value.map { if (it.id == tripId) updatedTrip else it }
+    }
+
 }

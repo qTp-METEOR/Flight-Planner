@@ -9,4 +9,5 @@ interface TripRepository {
 
     fun addTrip(name: String, checklists: List<TripChecklist> = emptyList()): Long
     fun deleteTrip(id: Long)
+    fun toggleTripChecklistItem(tripId: Long, checklistId: Long, categoryId: Long, itemId: Long)
 }
