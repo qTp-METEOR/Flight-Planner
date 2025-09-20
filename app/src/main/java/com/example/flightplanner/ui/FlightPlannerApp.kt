@@ -90,6 +90,7 @@ fun FlightPlannerApp() {
             val id = entry.arguments?.getLong("tripId") ?: return@composable
             TripPlanScreen(
                 tripId = id,
+                tripVm = tripVm,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -3,7 +3,7 @@ package com.example.flightplanner.model
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class TripDay(
+data class PlannerDay(
     val id: Long,
     val date: LocalDate,
     val entries: List<PlannerEntry>

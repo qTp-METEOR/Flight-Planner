@@ -2,18 +2,21 @@ package com.example.flightplanner.data
 
 import com.example.flightplanner.model.Trip
 import com.example.flightplanner.model.TripChecklist
+import com.example.flightplanner.model.TripDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import java.util.concurrent.atomic.AtomicLong
 
 class InMemoryTripRepository : TripRepository {
     private val _trips = MutableStateFlow<List<Trip>>(emptyList())
     override val trips: StateFlow<List<Trip>> = _trips
 
-    private val idGen = AtomicLong(1)
+    private val tripIdGen = AtomicLong(1)
+    private val dayIdGen = AtomicLong(1) // counter for TripDay IDs
 
     override fun addTrip(name: String, checklists: List<TripChecklist>): Long {
-        val id = idGen.getAndIncrement()
+        val id = tripIdGen.getAndIncrement()
         val trip = Trip(id, name, checklists)
         _trips.value = _trips.value + trip
         return id
@@ -42,4 +45,30 @@ class InMemoryTripRepository : TripRepository {
         _trips.value = _trips.value.map { if (it.id == tripId) updatedTrip else it }
     }
 
+    override fun addDay(tripId: Long, name: String) {
+        val trimmed = name.trim()
+        if (trimmed.isEmpty()) return
+
+        _trips.update { trips ->
+            trips.map { trip ->
+                if (trip.id == tripId) {
+                    val newDay = TripDay(
+                        id = dayIdGen.getAndIncrement(),
+                        name = trimmed
+                    )
+                    trip.copy(days = trip.days + newDay)
+                } else trip
+            }
+        }
+    }
+
+    override fun deleteDay(tripId: Long, dayId: Long) {
+        _trips.update { trips ->
+            trips.map { trip ->
+                if (trip.id == tripId) {
+                    trip.copy(days = trip.days.filterNot { it.id == dayId })
+                } else trip
+            }
+        }
+    }
 }

@@ -3,7 +3,13 @@ package com.example.flightplanner.model
 data class Trip(
     val id: Long,
     val name: String,
-    val checklists: List<TripChecklist> = emptyList()
+    val checklists: List<TripChecklist> = emptyList(),
+    val days: List<TripDay> = emptyList()
+)
+
+data class TripDay(
+    val id: Long,
+    val name: String
 )
 
 data class TripChecklist(

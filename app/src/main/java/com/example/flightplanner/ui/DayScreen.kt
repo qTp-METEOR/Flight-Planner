@@ -24,12 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.flightplanner.model.TripDay
+import com.example.flightplanner.model.PlannerDay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DaysScreen(
-    state: kotlinx.coroutines.flow.StateFlow<List<TripDay>>,
+    state: kotlinx.coroutines.flow.StateFlow<List<PlannerDay>>,
     onAddDay: () -> Unit,
     onOpenDay: (Long) -> Unit
 ) {
@@ -70,7 +70,7 @@ fun DaysScreen(
 }
 
 @Composable
-private fun DayRow(day: TripDay, onClick: () -> Unit) {
+private fun DayRow(day: PlannerDay, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

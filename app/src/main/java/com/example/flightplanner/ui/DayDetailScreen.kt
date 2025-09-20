@@ -17,12 +17,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.flightplanner.model.TripDay
+import com.example.flightplanner.model.PlannerDay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayDetailScreen(
-    day: TripDay?,
+    day: PlannerDay?,
     onNavigateUp: () -> Unit
 ) {
     Scaffold(
