@@ -8,16 +8,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.flightplanner.data.InMemoryChecklistRepository
+import com.example.flightplanner.data.InMemoryTripRepository
 import com.example.flightplanner.viewmodel.ChecklistViewModel
 import com.example.flightplanner.viewmodel.ChecklistViewModelFactory
+import com.example.flightplanner.viewmodel.TripViewModel
+import com.example.flightplanner.viewmodel.TripViewModelFactory
 
 @Composable
 fun FlightPlannerApp() {
     val navController = rememberNavController()
 
-    // ✅ Create ONE shared repo + ViewModel
     val checklistRepo = InMemoryChecklistRepository()
     val checklistVm: ChecklistViewModel = viewModel(factory = ChecklistViewModelFactory(checklistRepo))
+    val tripRepo = InMemoryTripRepository()
+    val tripVm: TripViewModel = viewModel(factory = TripViewModelFactory(tripRepo))
+
 
     NavHost(navController = navController, startDestination = "menu") {
         composable("menu") {
@@ -45,7 +50,10 @@ fun FlightPlannerApp() {
             )
         }
         composable("trips") {
-            TripsScreen(onBack = { navController.popBackStack() })
+            TripsScreen(
+                onBack = { navController.popBackStack() },
+                vm = tripVm
+            )
         }
     }
 }
