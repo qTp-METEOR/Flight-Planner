@@ -65,9 +65,35 @@ fun FlightPlannerApp() {
             TripDetailScreen(
                 vm = tripVm,
                 tripId = id,
+                onBack = { navController.popBackStack() },
+                onOpenChecklists = { navController.navigate("trip/$it/checklists") },
+                onOpenPlan = { navController.navigate("trip/$it/plan") }
+            )
+        }
+
+        composable(
+            route = "trip/{tripId}/checklists",
+            arguments = listOf(navArgument("tripId") { type = NavType.LongType })
+        ) { entry ->
+            val id = entry.arguments?.getLong("tripId") ?: return@composable
+            TripChecklistsScreen(
+                vm = tripVm,
+                tripId = id,
                 onBack = { navController.popBackStack() }
             )
         }
+
+        composable(
+            route = "trip/{tripId}/plan",
+            arguments = listOf(navArgument("tripId") { type = NavType.LongType })
+        ) { entry ->
+            val id = entry.arguments?.getLong("tripId") ?: return@composable
+            TripPlanScreen(
+                tripId = id,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
 
     }
 }
